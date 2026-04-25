@@ -10,11 +10,18 @@ pipeline {
         stage('build npm') {
             steps {
                 script {
-                    sh 'npm install'
+                    // Build the Backend
+                    dir('api') {
+                        sh 'npm install'
+                    }
+                    // Build the Frontend
+                    dir('my-app') {
+                        sh 'npm install'
+                        // sh 'npm run build' // Uncomment if you need to build the React production files
+                    }
                 }
             }
         }
-
         stage('building image') {
             steps {
                 script {
