@@ -14,7 +14,7 @@ RUN cd my-app && npm install
 
 # 5. Copy the rest of the source code
 COPY . .
-
+ENV NODE_OPTIONS=--openssl-legacy-provider
 # 6. Build the React app (if needed)
 RUN cd my-app && npm run build
 
