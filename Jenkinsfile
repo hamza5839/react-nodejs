@@ -1,20 +1,20 @@
 pipeline {
     agent any
     tools {
-        maven 'maven-3.9'
+        nodejs 'nodejs' // Define any tools you need here, e.g., JDK, Maven, etc.
         }
         stages {
-            stage('building Jar') {
+            stage('build npm') {
                 steps {
                     script {
-                        sh 'mvn clean package -DskipTests'
+                        sh 'npm install'
                     }
                 }
             }
             stage('building image') {
                 steps {
                     script {
-                        sh 'docker build -t myapp:latest .'
+                        sh 'docker build -t react-app:latest .'
                     }
                 }
             }
@@ -23,11 +23,10 @@ pipeline {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                             sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
-                            sh 'docker tag myapp:latest $DOCKERHUB_USERNAME/myapp:latest'
-                            sh 'docker push $DOCKERHUB_USERNAME/myapp:latest'
+                            sh 'docker tag react-app:latest $DOCKERHUB_USERNAME/react-app:latest'
+                            sh 'docker push $DOCKERHUB_USERNAME/react-app:latest'
                         }
                     }
                 }
-        }
-        
+        }        
 }
